@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Navbar } from "@/components/Navbar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -144,16 +143,7 @@ const Teammates = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar user={user} />
       <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2 bg-gradient-primary bg-clip-text text-transparent">
-            Find Your Teammates
-          </h1>
-          <p className="text-muted-foreground">
-            Connect with talented developers looking for teams
-          </p>
-        </div>
 
         <div className="mb-6 space-y-4">
           <div className="relative">

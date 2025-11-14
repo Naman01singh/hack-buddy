@@ -1,6 +1,5 @@
-import { useState, useEffect, FormEvent } from "react";
+import { useState, useEffect, FormEvent, memo } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Navbar } from "@/components/Navbar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -56,6 +55,156 @@ const createInitialFormState = (): HackathonFormState => ({
   website_url: "",
   registration_deadline: "",
 });
+
+// Move HackathonForm outside to prevent recreation on every render
+const HackathonForm = memo(({
+  onSubmit,
+  submitLabel,
+  onCancel,
+  formData,
+  setFormData,
+}: {
+  onSubmit: (e: FormEvent<HTMLFormElement>) => void;
+  submitLabel: string;
+  onCancel: () => void;
+  formData: HackathonFormState;
+  setFormData: React.Dispatch<React.SetStateAction<HackathonFormState>>;
+}) => (
+  <form onSubmit={onSubmit} className="space-y-4">
+    <div className="space-y-2">
+      <Label htmlFor="title">Title *</Label>
+      <Input
+        id="title"
+        required
+        value={formData.title}
+        onChange={(e) =>
+          setFormData((prev) => ({ ...prev, title: e.target.value }))
+        }
+        placeholder="Hackathon title"
+      />
+    </div>
+
+    <div className="space-y-2">
+      <Label htmlFor="description">Description *</Label>
+      <Textarea
+        id="description"
+        required
+        value={formData.description}
+        onChange={(e) =>
+          setFormData((prev) => ({ ...prev, description: e.target.value }))
+        }
+        placeholder="Describe your hackathon"
+        rows={4}
+      />
+    </div>
+
+    <div className="grid grid-cols-2 gap-4">
+      <div className="space-y-2">
+        <Label htmlFor="start_date">Start Date *</Label>
+        <Input
+          id="start_date"
+          type="datetime-local"
+          required
+          value={formData.start_date}
+          onChange={(e) =>
+            setFormData((prev) => ({ ...prev, start_date: e.target.value }))
+          }
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="end_date">End Date *</Label>
+        <Input
+          id="end_date"
+          type="datetime-local"
+          required
+          value={formData.end_date}
+          onChange={(e) =>
+            setFormData((prev) => ({ ...prev, end_date: e.target.value }))
+          }
+        />
+      </div>
+    </div>
+
+    <div className="space-y-2">
+      <Label htmlFor="registration_deadline">Registration Deadline</Label>
+      <Input
+        id="registration_deadline"
+        type="datetime-local"
+        value={formData.registration_deadline}
+        onChange={(e) =>
+          setFormData((prev) => ({
+            ...prev,
+            registration_deadline: e.target.value,
+          }))
+        }
+      />
+    </div>
+
+    <div className="flex items-center space-x-2">
+      <Switch
+        id="is_virtual"
+        checked={formData.is_virtual}
+        onCheckedChange={(checked) =>
+          setFormData((prev) => ({
+            ...prev,
+            is_virtual: checked,
+            location: checked ? "" : prev.location,
+          }))
+        }
+      />
+      <Label htmlFor="is_virtual">Virtual Event</Label>
+    </div>
+
+    {!formData.is_virtual && (
+      <div className="space-y-2">
+        <Label htmlFor="location">Location</Label>
+        <Input
+          id="location"
+          value={formData.location}
+          onChange={(e) =>
+            setFormData((prev) => ({ ...prev, location: e.target.value }))
+          }
+          placeholder="Event location"
+        />
+      </div>
+    )}
+
+    <div className="space-y-2">
+      <Label htmlFor="prize_pool">Prize Pool</Label>
+      <Input
+        id="prize_pool"
+        value={formData.prize_pool}
+        onChange={(e) =>
+          setFormData((prev) => ({ ...prev, prize_pool: e.target.value }))
+        }
+        placeholder="e.g., $10,000 in prizes"
+      />
+    </div>
+
+    <div className="space-y-2">
+      <Label htmlFor="website_url">Website URL</Label>
+      <Input
+        id="website_url"
+        type="url"
+        value={formData.website_url}
+        onChange={(e) =>
+          setFormData((prev) => ({ ...prev, website_url: e.target.value }))
+        }
+        placeholder="https://example.com"
+      />
+    </div>
+
+    <div className="flex gap-2 pt-4">
+      <Button type="submit" className="flex-1">
+        {submitLabel}
+      </Button>
+      <Button type="button" variant="outline" onClick={onCancel}>
+        Cancel
+      </Button>
+    </div>
+  </form>
+));
 
 const Hackathons = () => {
   const [user, setUser] = useState<any>(null);
@@ -175,150 +324,6 @@ const Hackathons = () => {
     setEditDialogOpen(true);
   };
 
-  const HackathonForm = ({
-    onSubmit,
-    submitLabel,
-    onCancel,
-  }: {
-    onSubmit: (e: FormEvent<HTMLFormElement>) => void;
-    submitLabel: string;
-    onCancel: () => void;
-  }) => (
-    <form onSubmit={onSubmit} className="space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor="title">Title *</Label>
-        <Input
-          id="title"
-          required
-          value={formData.title}
-          onChange={(e) =>
-            setFormData((prev) => ({ ...prev, title: e.target.value }))
-          }
-          placeholder="Hackathon title"
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="description">Description *</Label>
-        <Textarea
-          id="description"
-          required
-          value={formData.description}
-          onChange={(e) =>
-            setFormData((prev) => ({ ...prev, description: e.target.value }))
-          }
-          placeholder="Describe your hackathon"
-          rows={4}
-        />
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="start_date">Start Date *</Label>
-          <Input
-            id="start_date"
-            type="datetime-local"
-            required
-            value={formData.start_date}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, start_date: e.target.value }))
-            }
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="end_date">End Date *</Label>
-          <Input
-            id="end_date"
-            type="datetime-local"
-            required
-            value={formData.end_date}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, end_date: e.target.value }))
-            }
-          />
-        </div>
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="registration_deadline">Registration Deadline</Label>
-        <Input
-          id="registration_deadline"
-          type="datetime-local"
-          value={formData.registration_deadline}
-          onChange={(e) =>
-            setFormData((prev) => ({
-              ...prev,
-              registration_deadline: e.target.value,
-            }))
-          }
-        />
-      </div>
-
-      <div className="flex items-center space-x-2">
-        <Switch
-          id="is_virtual"
-          checked={formData.is_virtual}
-          onCheckedChange={(checked) =>
-            setFormData((prev) => ({
-              ...prev,
-              is_virtual: checked,
-              location: checked ? "" : prev.location,
-            }))
-          }
-        />
-        <Label htmlFor="is_virtual">Virtual Event</Label>
-      </div>
-
-      {!formData.is_virtual && (
-        <div className="space-y-2">
-          <Label htmlFor="location">Location</Label>
-          <Input
-            id="location"
-            value={formData.location}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, location: e.target.value }))
-            }
-            placeholder="Event location"
-          />
-        </div>
-      )}
-
-      <div className="space-y-2">
-        <Label htmlFor="prize_pool">Prize Pool</Label>
-        <Input
-          id="prize_pool"
-          value={formData.prize_pool}
-          onChange={(e) =>
-            setFormData((prev) => ({ ...prev, prize_pool: e.target.value }))
-          }
-          placeholder="e.g., $10,000 in prizes"
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="website_url">Website URL</Label>
-        <Input
-          id="website_url"
-          type="url"
-          value={formData.website_url}
-          onChange={(e) =>
-            setFormData((prev) => ({ ...prev, website_url: e.target.value }))
-          }
-          placeholder="https://example.com"
-        />
-      </div>
-
-      <div className="flex gap-2 pt-4">
-        <Button type="submit" className="flex-1">
-          {submitLabel}
-        </Button>
-        <Button type="button" variant="outline" onClick={onCancel}>
-          Cancel
-        </Button>
-      </div>
-    </form>
-  );
 
   const fetchHackathons = async () => {
     try {
@@ -441,25 +446,16 @@ const Hackathons = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar user={user} />
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8 flex justify-between items-start">
-          <div>
-            <h1 className="text-4xl font-bold mb-2 bg-gradient-primary bg-clip-text text-transparent">
-              Upcoming Hackathons
-            </h1>
-            <p className="text-muted-foreground">
-              Discover and register for exciting hackathon events
-            </p>
-          </div>
-
-          <Dialog open={dialogOpen} onOpenChange={handleCreateDialogChange}>
-            <DialogTrigger asChild>
-              <Button>
-                <Plus className="h-4 w-4 mr-2" />
-                Add Hackathon
-              </Button>
-            </DialogTrigger>
+          {user && (
+            <Dialog open={dialogOpen} onOpenChange={handleCreateDialogChange}>
+              <DialogTrigger asChild>
+                <Button>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add Hackathon
+                </Button>
+              </DialogTrigger>
             <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>Create New Hackathon</DialogTitle>
@@ -468,9 +464,12 @@ const Hackathons = () => {
                 onSubmit={handleCreateHackathon}
                 submitLabel="Create Hackathon"
                 onCancel={() => handleCreateDialogChange(false)}
+                formData={formData}
+                setFormData={setFormData}
               />
             </DialogContent>
           </Dialog>
+          )}
           <Dialog open={editDialogOpen} onOpenChange={handleEditDialogChange}>
             <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
@@ -480,6 +479,8 @@ const Hackathons = () => {
                 onSubmit={handleUpdateHackathon}
                 submitLabel="Update Hackathon"
                 onCancel={resetEditState}
+                formData={formData}
+                setFormData={setFormData}
               />
             </DialogContent>
           </Dialog>

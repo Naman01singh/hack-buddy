@@ -57,9 +57,19 @@ export const PersonalChat = ({ otherUserId }: PersonalChatProps) => {
     useEffect(() => {
         if (otherUserId) {
             fetchOtherUser();
-            fetchMessages();
         }
     }, [otherUserId]);
+
+    // Fetch messages when both user and otherUserId are available
+    useEffect(() => {
+        if (user && otherUserId) {
+            fetchMessages();
+        } else if (otherUserId && user === null) {
+            // If user is explicitly null (not just undefined/loading), stop loading
+            // This handles the case where user is not authenticated
+            setLoading(false);
+        }
+    }, [user, otherUserId]);
 
     useEffect(() => {
         if (otherUserId && user) {

@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Navbar } from "@/components/Navbar";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -400,7 +399,6 @@ const TeamDetail = () => {
     if (loading) {
         return (
             <div className="min-h-screen bg-background">
-                <Navbar user={user} />
                 <div className="container mx-auto px-4 py-8">
                     <div className="text-center py-12">Loading team details...</div>
                 </div>
@@ -411,7 +409,6 @@ const TeamDetail = () => {
     if (!team) {
         return (
             <div className="min-h-screen bg-background">
-                <Navbar user={user} />
                 <div className="container mx-auto px-4 py-8">
                     <div className="text-center py-12">
                         <p className="text-muted-foreground mb-4">Team not found</p>
@@ -424,7 +421,6 @@ const TeamDetail = () => {
 
     return (
         <div className="min-h-screen bg-background">
-            <Navbar user={user} />
             <div className="container mx-auto px-4 py-8">
                 <Button
                     variant="ghost"

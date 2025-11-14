@@ -3,7 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import { SimpleNavbar } from "@/components/SimpleNavbar";
+import { ResizableNavbarComponent } from "@/components/ResizableNavbar";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Teammates from "./pages/Teammates";
@@ -18,12 +18,9 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 const AppLayout = () => {
-  const location = useLocation();
-  const showSimpleNavbar = location.pathname === "/";
-
   return (
     <div className="flex flex-col min-h-screen">
-      {showSimpleNavbar && <SimpleNavbar />}
+      <ResizableNavbarComponent />
       <main className="flex-1">
         <Routes>
           <Route path="/" element={<Index />} />

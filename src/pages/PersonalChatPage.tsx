@@ -1,5 +1,4 @@
 import { useParams } from "react-router-dom";
-import { Navbar } from "@/components/Navbar";
 import { PersonalChat } from "@/components/PersonalChat";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -25,7 +24,6 @@ const PersonalChatPage = () => {
     if (!userId) {
         return (
             <div className="min-h-screen bg-background">
-                <Navbar user={user} />
                 <div className="container mx-auto px-4 py-8">
                     <p className="text-muted-foreground">Invalid user ID</p>
                 </div>
@@ -35,7 +33,6 @@ const PersonalChatPage = () => {
 
     return (
         <div className="min-h-screen bg-background">
-            <Navbar user={user} />
             <div className="container mx-auto px-4 py-8 max-w-4xl">
                 <PersonalChat otherUserId={userId} />
             </div>
