@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Users, Calendar, Search, Code2, ArrowRight, ChevronDown } from "lucide-react";
@@ -8,6 +8,7 @@ import heroBanner from "@/assets/-_Featured_Image.jpg";
 
 const Index = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [user, setUser] = useState<any>(null);
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
 
@@ -27,15 +28,47 @@ const Index = () => {
 
   // If page is loaded with a hash (e.g. /#about), scroll to that section
   useEffect(() => {
-    if (window.location.hash) {
-      const id = window.location.hash.replace("#", "");
-      const el = document.getElementById(id);
-      if (el) {
-        // use setTimeout to wait for layout if needed
-        setTimeout(() => el.scrollIntoView({ behavior: "smooth" }), 50);
+    const handleHashScroll = () => {
+      if (window.location.hash) {
+        const id = window.location.hash.replace("#", "");
+        // Wait for DOM to be ready
+        setTimeout(() => {
+          const el = document.getElementById(id);
+          if (el) {
+            // Account for navbar height with offset
+            const yOffset = -80;
+            const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+            window.scrollTo({ top: y, behavior: "smooth" });
+          }
+        }, 200);
       }
-    }
+    };
+    
+    // Initial scroll on mount
+    handleHashScroll();
+    
+    // Also listen for hash changes (when navigating from other pages)
+    window.addEventListener("hashchange", handleHashScroll);
+    
+    return () => {
+      window.removeEventListener("hashchange", handleHashScroll);
+    };
   }, []);
+
+  // Also handle hash when location changes (React Router navigation)
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace("#", "");
+      setTimeout(() => {
+        const el = document.getElementById(id);
+        if (el) {
+          const yOffset = -80;
+          const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          window.scrollTo({ top: y, behavior: "smooth" });
+        }
+      }, 300);
+    }
+  }, [location.hash]);
 
   const features = [
     {
@@ -262,23 +295,6 @@ const Index = () => {
               )}
             </div>
           ))}
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 bg-card/50">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold mb-4 text-foreground">
-            Ready to Find Your Team?
-          </h2>
-          <p className="text-muted-foreground text-lg mb-8 max-w-2xl mx-auto">
-            Join the Hack-Buddy community today and start building amazing projects with talented developers.
-          </p>
-          {!user && (
-            <Button size="lg" onClick={() => navigate("/auth")} className="shadow-glow-cyan">
-              Sign Up Now <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-          )}
         </div>
       </section>
     </div>

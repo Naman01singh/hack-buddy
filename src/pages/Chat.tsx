@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Navbar } from "@/components/Navbar";
 import { Chat } from "@/components/Chat";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -114,15 +113,7 @@ const ChatPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar user={user} />
       <div className="container mx-auto px-4 py-8">
-        <div className="mb-6">
-          <h1 className="text-4xl font-bold mb-2 bg-gradient-primary bg-clip-text text-transparent">
-            Chat
-          </h1>
-          <p className="text-muted-foreground">Connect with your team members in real-time</p>
-        </div>
-
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Teams sidebar */}
           <div className="lg:col-span-1">
