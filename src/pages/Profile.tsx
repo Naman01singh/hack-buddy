@@ -164,9 +164,9 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8 max-w-2xl">
-        <Card className="shadow-glow-cyan">
+        <Card>
           <CardHeader>
-            <CardTitle className="text-3xl bg-gradient-primary bg-clip-text text-transparent">
+            <CardTitle className="text-3xl text-foreground">
               Your Profile
             </CardTitle>
           </CardHeader>

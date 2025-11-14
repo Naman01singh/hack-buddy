@@ -491,7 +491,7 @@ const Hackathons = () => {
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {hackathons.map((hackathon) => (
-              <Card key={hackathon.id} className="hover:shadow-glow-cyan transition-all">
+              <Card key={hackathon.id} className="hover:border-primary transition-colors">
                 <CardHeader>
                   <div className="flex justify-between items-start">
                     <div>

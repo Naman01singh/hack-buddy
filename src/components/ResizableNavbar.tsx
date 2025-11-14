@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Sparkles, User, LogOut, MessageCircle } from "lucide-react";
+import { Sparkles, User, LogOut, MessageCircle, Moon, Sun } from "lucide-react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
@@ -26,6 +26,7 @@ export const ResizableNavbarComponent: React.FC = () => {
   const [active, setActive] = useState<string>("home");
   const [user, setUser] = useState<any>(null);
   const [visible, setVisible] = useState<boolean>(false);
+  const [isDark, setIsDark] = useState<boolean>(false);
   const sectionsRef = useRef<Record<string, HTMLElement | null>>({});
 
   /**
@@ -41,9 +42,32 @@ export const ResizableNavbarComponent: React.FC = () => {
   }, []);
 
   /**
-   * Initialize user session and scroll detection
+   * Initialize theme, user session and scroll detection
    */
   useEffect(() => {
+    // Initialize theme from localStorage or system preference
+    const initTheme = () => {
+      try {
+        const stored = localStorage.getItem("theme");
+        if (stored === "dark") {
+          document.documentElement.classList.add("dark");
+          setIsDark(true);
+        } else if (stored === "light") {
+          document.documentElement.classList.remove("dark");
+          setIsDark(false);
+        } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+          document.documentElement.classList.add("dark");
+          setIsDark(true);
+        } else {
+          setIsDark(document.documentElement.classList.contains("dark"));
+        }
+      } catch (e) {
+        setIsDark(document.documentElement.classList.contains("dark"));
+      }
+    };
+
+    initTheme();
+
     // Get user session
     const getUser = async () => {
       const { data: { session } } = await supabase.auth.getSession();
@@ -109,6 +133,19 @@ export const ResizableNavbarComponent: React.FC = () => {
   const handleLogout = async () => {
     await supabase.auth.signOut();
     navigate("/");
+  };
+
+  const toggleTheme = () => {
+    const newTheme = !isDark;
+    setIsDark(newTheme);
+    
+    if (newTheme) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
   };
 
   /**
@@ -193,20 +230,22 @@ export const ResizableNavbarComponent: React.FC = () => {
           className={cn(
             "relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal transition-colors",
             visible 
-              ? "text-neutral-800 hover:text-neutral-900" 
-              : "text-neutral-200 hover:text-white"
+              ? isDark ? "text-white hover:text-neutral-200" : "text-neutral-900 hover:text-neutral-800"
+              : isDark ? "text-neutral-200 hover:text-white" : "text-neutral-900 hover:text-neutral-800"
           )}
           onClick={(e) => {
             e.preventDefault();
             handleNavClick("/");
           }}
         >
-          <div className="p-1.5 rounded-lg bg-cyan-500/20">
-            <Sparkles className="h-5 w-5 text-cyan-400" />
+          <div className="p-1.5 rounded-lg bg-muted">
+            <Sparkles className="h-5 w-5 text-primary" />
           </div>
           <span className={cn(
             "font-medium transition-colors",
-            visible ? "text-neutral-800" : "text-neutral-200"
+            visible 
+              ? isDark ? "text-white" : "text-neutral-900"
+              : isDark ? "text-neutral-200" : "text-neutral-900"
           )}>Hack-Buddy</span>
         </Link>
 
@@ -235,23 +274,37 @@ export const ResizableNavbarComponent: React.FC = () => {
 
         {/* Right side actions */}
         <div className="relative z-20 flex items-center gap-3 ml-auto">
+          {/* Theme Toggle */}
+          <button
+            onClick={toggleTheme}
+            className="flex items-center justify-center w-10 h-10 rounded-lg bg-muted hover:bg-muted/80 transition-colors"
+            title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+            aria-label="Toggle theme"
+          >
+            {isDark ? (
+              <Sun className="h-5 w-5 text-foreground" />
+            ) : (
+              <Moon className="h-5 w-5 text-foreground" />
+            )}
+          </button>
+          
           {user ? (
             <>
               {/* User logged in: show profile icon and logout */}
               <Link
                 to="/profile"
-                className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-500/20 hover:bg-blue-500/30 transition-colors"
+                className="flex items-center justify-center w-10 h-10 rounded-lg bg-muted hover:bg-muted/80 transition-colors"
                 title="View Profile"
               >
-                <User className="h-5 w-5 text-blue-400" />
+                <User className="h-5 w-5 text-primary" />
               </Link>
               <button
                 onClick={handleLogout}
-                className="flex items-center justify-center w-10 h-10 rounded-full bg-red-500/20 hover:bg-red-500/30 transition-colors"
+                className="flex items-center justify-center w-10 h-10 rounded-lg bg-muted hover:bg-muted/80 transition-colors"
                 title="Logout"
                 aria-label="Logout"
               >
-                <LogOut className="h-5 w-5 text-red-400" />
+                <LogOut className="h-5 w-5 text-destructive" />
               </button>
             </>
           ) : (
@@ -273,16 +326,22 @@ export const ResizableNavbarComponent: React.FC = () => {
           {/* Mobile Logo */}
           <Link
             to="/"
-            className="flex items-center gap-2 px-2 py-1 text-sm font-medium text-neutral-200 hover:text-white transition-colors"
+            className={cn(
+              "flex items-center gap-2 px-2 py-1 text-sm font-medium transition-colors",
+              isDark ? "text-neutral-200 hover:text-white" : "text-neutral-900 hover:text-neutral-800"
+            )}
             onClick={(e) => {
               e.preventDefault();
               handleNavClick("/");
             }}
           >
-            <div className="p-1.5 rounded-lg bg-cyan-500/20">
-              <Sparkles className="h-4 w-4 text-cyan-400" />
+            <div className="p-1.5 rounded-lg bg-muted">
+              <Sparkles className="h-4 w-4 text-primary" />
             </div>
-            <span className="font-semibold text-neutral-200">Hack-Buddy</span>
+            <span className={cn(
+              "font-semibold transition-colors",
+              isDark ? "text-neutral-200" : "text-neutral-900"
+            )}>Hack-Buddy</span>
           </Link>
 
           {/* Mobile Menu Toggle */}
@@ -318,7 +377,7 @@ export const ResizableNavbarComponent: React.FC = () => {
               <Link
                 to="/profile"
                 onClick={() => setIsOpen(false)}
-                className="w-full flex items-center gap-2 px-4 py-2 text-sm font-medium text-foreground hover:bg-primary/20 rounded-md transition-colors"
+                className="w-full flex items-center gap-2 px-4 py-2 text-sm font-medium text-foreground hover:bg-muted rounded-lg transition-colors"
               >
                 <User className="h-4 w-4" />
                 View Profile
@@ -328,7 +387,7 @@ export const ResizableNavbarComponent: React.FC = () => {
                   handleLogout();
                   setIsOpen(false);
                 }}
-                className="w-full flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-500 hover:bg-red-500/20 rounded-md transition-colors"
+                className="w-full flex items-center gap-2 px-4 py-2 text-sm font-medium text-destructive hover:bg-muted rounded-lg transition-colors"
               >
                 <LogOut className="h-4 w-4" />
                 Logout
@@ -340,7 +399,7 @@ export const ResizableNavbarComponent: React.FC = () => {
               <Link
                 to="/auth"
                 onClick={() => setIsOpen(false)}
-                className="w-full block text-center px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-md shadow-sm"
+                className="w-full block text-center px-4 py-2 bg-primary text-white rounded-lg font-semibold hover:bg-primary/85 transition-colors"
               >
                 Sign In
               </Link>

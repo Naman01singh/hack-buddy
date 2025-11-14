@@ -222,7 +222,7 @@ const Teams = () => {
             {teams.map((team) => (
               <Card
                 key={team.id}
-                className="hover:shadow-glow-cyan transition-all cursor-pointer"
+                className="hover:border-primary transition-colors cursor-pointer"
                 onClick={() => navigate(`/teams/${team.id}`)}
               >
                 <CardHeader>
