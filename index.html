@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hack-Buddy Team Finder - Connect with Your Perfect Team</title>
+  <link rel="icon" type="image/png" href="/logo.jpeg" />
+  <meta name="description"
+    content="Find teammates, create teams, and discover hackathons with Hack-Buddy. Connect with talented developers and build amazing projects together." />
+  <meta name="author" content="Hack-Buddy" />
+  <meta name="keywords" content="hackathon, team finder, Hack-Buddy, developers, coding, technology, innovation" />
+
+  <meta property="og:title" content="Hack-Buddy Team Finder - Connect with Your Perfect Team" />
+  <meta property="og:description"
+    content="Find teammates, create teams, and discover hackathons with Hack-Buddy. Connect with talented developers and build amazing projects together." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@Lovable" />
+  <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+</head>
+
+<body>
+  <div id="root"></div>
+  <!-- Theme initialization: set dark class before React mounts to avoid flicker -->
+  <script>
+    (function () {
+      try {
+        const theme = localStorage.getItem('theme');
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else if (theme === 'light') {
+          document.documentElement.classList.remove('dark');
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.classList.add('dark');
+        }
+      } catch (e) {
+        // ignore
+      }
+    })();
+  </script>
+
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
+</html>
