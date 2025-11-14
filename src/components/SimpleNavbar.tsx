@@ -175,12 +175,12 @@ export const SimpleNavbar: React.FC = () => {
                         ) : (
                             <>
                                 {/* User not logged in: show Sign In button */}
-                                <a
-                                    href="/auth"
+                                <Link
+                                    to="/auth"
                                     className="hidden md:inline-flex items-center px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-md shadow-sm hover:brightness-95"
                                 >
                                     Sign In
-                                </a>
+                                </Link>
                             </>
                         )}
                         <button
@@ -236,13 +236,13 @@ export const SimpleNavbar: React.FC = () => {
                                     </button>
                                 </>
                             ) : (
-                                <a
-                                    href="/auth"
+                                <Link
+                                    to="/auth"
                                     onClick={() => setIsOpen(false)}
                                     className="w-full block text-center px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-md shadow-sm"
                                 >
                                     Sign In
-                                </a>
+                                </Link>
                             )}
                         </div>
                     </div>
