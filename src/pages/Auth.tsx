@@ -82,9 +82,9 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-background">
-      <Card className="w-full max-w-md shadow-glow-cyan">
+      <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-2xl bg-gradient-primary bg-clip-text text-transparent">
+          <CardTitle className="text-2xl text-foreground">
             {isLogin ? "Welcome Back" : "Create Account"}
           </CardTitle>
           <CardDescription>

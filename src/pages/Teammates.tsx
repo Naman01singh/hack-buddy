@@ -203,7 +203,7 @@ const Teammates = () => {
             {sortedProfiles.map((profile) => (
               <Card
                 key={profile.id}
-                className="hover:shadow-glow-cyan transition-all cursor-pointer"
+                className="hover:border-primary transition-colors cursor-pointer"
                 onClick={() => {
                   setSelectedUserId(profile.id);
                   setProfileModalOpen(true);

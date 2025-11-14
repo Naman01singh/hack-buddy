@@ -8,39 +8,36 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 220 26% 14%;
-    --foreground: 210 40% 98%;
+    /* Flat Design Color Palette - Light Mode */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 10%;
 
-    --card: 220 26% 18%;
-    --card-foreground: 210 40% 98%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 10%;
 
-    --popover: 220 26% 14%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
 
     --primary: 199 89% 48%;
-    --primary-foreground: 210 40% 98%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 217 19% 27%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 10%;
 
-    --muted: 217 19% 27%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
 
-    --accent: 180 100% 50%;
-    --accent-foreground: 220 26% 14%;
+    --accent: 199 89% 48%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 72% 51%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 217 19% 27%;
-    --input: 217 19% 27%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
     --ring: 199 89% 48%;
 
-    --radius: 0.75rem;
-
-    --gradient-primary: linear-gradient(135deg, hsl(0 72% 51%), hsl(0 84% 60%));
-    --gradient-hero: linear-gradient(180deg, hsl(220 26% 14% / 0.3), hsl(220 26% 14% / 0.5));
-    --glow-cyan: 0 0 40px hsl(180 100% 50% / 0.3);
+    --radius: 0.5rem; /* 8px - medium border radius for flat design */
 
     --sidebar-background: 220 26% 16%;
     --sidebar-foreground: 210 40% 98%;
@@ -53,32 +50,33 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 220 26% 14%;
-    --foreground: 210 40% 98%;
+    /* Flat Design Color Palette - Dark Mode */
+    --background: 0 0% 10%;
+    --foreground: 0 0% 98%;
 
-    --card: 220 26% 18%;
-    --card-foreground: 210 40% 98%;
+    --card: 0 0% 14%;
+    --card-foreground: 0 0% 98%;
 
-    --popover: 220 26% 14%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 98%;
 
     --primary: 199 89% 48%;
-    --primary-foreground: 210 40% 98%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 217 19% 27%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 0 0% 20%;
+    --secondary-foreground: 0 0% 98%;
 
-    --muted: 217 19% 27%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 0 0% 20%;
+    --muted-foreground: 0 0% 65%;
 
-    --accent: 180 100% 50%;
-    --accent-foreground: 220 26% 14%;
+    --accent: 199 89% 48%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 72% 51%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 217 19% 27%;
-    --input: 217 19% 27%;
+    --border: 0 0% 25%;
+    --input: 0 0% 25%;
     --ring: 199 89% 48%;
 
     --sidebar-background: 220 26% 16%;
@@ -99,20 +97,15 @@ All colors MUST be HSL.
   }
 }
 
-/* Hero overlay that respects theme variables and dark mode */
+/* Hero overlay - flat design with solid color overlay */
 @layer components {
   .hero-overlay {
-    /* light-mode overlay: reduced contrast for better text readability while keeping image visible */
-    background-image: radial-gradient(circle at center, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.03) 40%, rgba(255, 255, 255, 0.1) 100%), var(--gradient-hero);
-    background-size: cover;
-    background-position: center;
-    /* ensure gradient sits above image */
-    mix-blend-mode: normal;
+    /* Flat design: simple solid color overlay */
+    background-color: rgba(0, 0, 0, 0.4);
   }
 
-  /* In dark mode, add a semi-opaque dark layer on top to darken the hero */
   .dark .hero-overlay {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.35)), var(--gradient-hero);
+    background-color: rgba(0, 0, 0, 0.6);
   }
 }
 
@@ -123,5 +116,14 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Inter', 'SF Pro Display', sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+    letter-spacing: normal;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    line-height: 1.4;
   }
 }

@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Users, Calendar, Search, Code2, ArrowRight, ChevronDown } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import heroBanner from "@/assets/-_Featured_Image.jpg";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -124,15 +123,9 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="relative h-[600px] flex items-center justify-center overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${heroBanner})` }}
-        />
-        {/* overlay: uses CSS var --gradient-hero; dark mode will add an extra dark layer */}
-        <div className="absolute inset-0 hero-overlay" />
 
         <div className="relative z-10 container mx-auto px-4 text-center">
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 text-foreground drop-shadow-sm">
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 text-foreground">
             Thapar Hackathon Team Finder
           </h1>
           <p className="text-xl md:text-2xl text-foreground/90 mb-8 max-w-2xl mx-auto">
@@ -143,7 +136,6 @@ const Index = () => {
               <Button
                 size="lg"
                 onClick={() => navigate("/teammates")}
-                className="shadow-glow-cyan"
               >
                 Find Teammates <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
@@ -152,7 +144,6 @@ const Index = () => {
                 <Button
                   size="lg"
                   onClick={() => navigate("/auth")}
-                  className="shadow-glow-cyan"
                 >
                   Get Started <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
@@ -184,9 +175,9 @@ const Index = () => {
           {features.map((feature, idx) => {
             const Icon = feature.icon;
             return (
-              <Card key={idx} className="hover:shadow-glow-cyan transition-all border-border/50">
+              <Card key={idx} className="hover:border-primary transition-colors border-border">
                 <CardContent className="pt-6 text-center">
-                  <div className="mb-4 inline-flex p-3 rounded-lg bg-primary/10">
+                  <div className="mb-4 inline-flex p-3 rounded-lg bg-muted">
                     <Icon className="h-8 w-8 text-primary" />
                   </div>
                   <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
@@ -199,7 +190,7 @@ const Index = () => {
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-20 bg-card/50">
+      <section id="about" className="py-20 bg-muted">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold mb-4 text-foreground text-center">
             About Hack-Buddy
