@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS public.hackathons (
   prize_pool TEXT,
   website_url TEXT,
   image_url TEXT,
+  created_by UUID REFERENCES public.profiles(id) ON DELETE SET NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
 
@@ -120,6 +121,9 @@ CREATE TABLE IF NOT EXISTS public.personal_messages (
 -- ============================================================================
 -- SECTION 2: CREATE INDEXES FOR PERFORMANCE
 -- ============================================================================
+
+-- Hackathons indexes
+CREATE INDEX IF NOT EXISTS idx_hackathons_created_by ON public.hackathons(created_by);
 
 -- Messages indexes
 CREATE INDEX IF NOT EXISTS idx_messages_team_id ON public.messages(team_id);
@@ -224,6 +228,8 @@ DROP POLICY IF EXISTS "Users can insert own profile" ON public.profiles;
 
 DROP POLICY IF EXISTS "Hackathons are viewable by everyone" ON public.hackathons;
 DROP POLICY IF EXISTS "Authenticated users can create hackathons" ON public.hackathons;
+DROP POLICY IF EXISTS "Users can update hackathons they created" ON public.hackathons;
+DROP POLICY IF EXISTS "Users can delete hackathons they created" ON public.hackathons;
 
 DROP POLICY IF EXISTS "Teams are viewable by everyone" ON public.teams;
 DROP POLICY IF EXISTS "Authenticated users can create teams" ON public.teams;
@@ -275,6 +281,15 @@ CREATE POLICY "Authenticated users can create hackathons"
   ON public.hackathons FOR INSERT
   TO authenticated
   WITH CHECK (true);
+
+CREATE POLICY "Users can update hackathons they created"
+  ON public.hackathons FOR UPDATE
+  USING (auth.uid() = created_by)
+  WITH CHECK (auth.uid() = created_by);
+
+CREATE POLICY "Users can delete hackathons they created"
+  ON public.hackathons FOR DELETE
+  USING (auth.uid() = created_by);
 
 -- Teams policies
 CREATE POLICY "Teams are viewable by everyone"
