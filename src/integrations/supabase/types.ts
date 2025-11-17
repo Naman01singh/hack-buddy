@@ -63,6 +63,7 @@ export type Database = {
       hackathons: {
         Row: {
           created_at: string | null
+          created_by: string | null
           description: string
           end_date: string
           id: string
@@ -78,6 +79,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string | null
+          created_by?: string | null
           description: string
           end_date: string
           id?: string
@@ -93,6 +95,7 @@ export type Database = {
         }
         Update: {
           created_at?: string | null
+          created_by?: string | null
           description?: string
           end_date?: string
           id?: string
@@ -106,7 +109,15 @@ export type Database = {
           title?: string
           website_url?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "hackathons_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
